@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ffi';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -19,12 +22,21 @@ String name,user,password;
 if (fornKey.currentState.validate()) {
   fornKey.currentState.save();
   print('name=$name,user=$user,password=$password');
-
+  registerThread();
 }
-
-
       },
     );
+  }
+
+  Future<Void> registerThread()async{
+
+String urlAPI = 'https://www.androidthai.in.th/sa/addDataSa.php?isAdd=true&Name=$name&User=$user&Password=$password';
+var response = await http.get(urlAPI);
+var result = json.decode(response.body);
+print('retult=$result');
+if (result.toString()=='true') {
+  Navigator.of(context).pop();
+}
   }
 
   Widget nameText() {
